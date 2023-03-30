@@ -129,39 +129,32 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Container(
-            width: widget.countryCodeWidth,
-            margin: const EdgeInsets.only(right: 15),
-            child: GestureDetector(
-              onTap: onChangeCountry,
-              child: ValueListenableBuilder<Country?>(
+          GestureDetector(
+            onTap: onChangeCountry,
+            child: ValueListenableBuilder<Country?>(
                 valueListenable: _effectiveController!.countryNotifier,
-                builder: (context, value, child) => InputDecorator(
-                  expands: false,
-                  textAlignVertical: TextAlignVertical.center,
-                  isFocused: _countryCodeFocused,
-                  decoration: widget.decoration.copyWith(
-                    hintText: '',
-                    errorStyle: _hiddenText,
-                    helperStyle: _hiddenText,
-                    counterStyle: _hiddenText,
-                    labelStyle: _hiddenText,
-                    counterText: null,
-                    prefixIcon: widget.prefixBuilder(context, value),
-                    prefix: null,
-                    prefixText: null,
-                    suffixIcon: null,
-                    suffixText: null,
-                    suffix: null,
-                  ),
-                  child: Text(
-                    '+${value?.prefix ?? ''}',
-                    style: textStyle,
-                  ),
-                ),
-              ),
-            ),
+                builder: (context, value, child) {
+                  final flag = value?.code.toUpperCase().replaceAllMapped(
+                        RegExp(r'[A-Z]'),
+                        (match) => String.fromCharCode(
+                            match.group(0)!.codeUnitAt(0) + 127397),
+                      );
+                  Row(
+                    children: [
+                      Text(
+                        '+${value?.prefix ?? ''}',
+                        style: textStyle,
+                      ),
+                      if (flag != null)
+                        Text(
+                          flag,
+                          style: TextStyle(fontSize: 24),
+                        ),
+                    ],
+                  );
+                }),
           ),
+          SizedBox(width: 16),
           Expanded(
             child: ValueListenableBuilder<Country?>(
               valueListenable: _effectiveController!.countryNotifier,
