@@ -127,7 +127,7 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
         counterText: widget.decoration.counterText,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           GestureDetector(
             onTap: onChangeCountry,
@@ -162,12 +162,6 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
               builder: (context, value, child) => TextField(
                 controller: _effectiveController!.nationalNumberController,
                 style: textStyle,
-                decoration: widget.decoration.copyWith(
-                  labelStyle: _hiddenText,
-                  errorStyle: _hiddenText,
-                  helperStyle: _hiddenText,
-                  counterStyle: _hiddenText,
-                ),
                 keyboardType: TextInputType.number,
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 maxLength: value?.length.maxLength ?? 15,
