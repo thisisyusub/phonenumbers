@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:phonenumbers_core/core.dart';
@@ -111,20 +112,30 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = widget.style ?? Theme.of(context).textTheme.bodyText1;
+    final border = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(
+        width: 1,
+        color: Color(0xFFE4E9F2),
+      ),
+    );
+
+    final focusedBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8),
+      borderSide: BorderSide(
+        width: 1,
+        color: Color(0xFF0073E6),
+      ),
+    );
 
     return InputDecorator(
       decoration: InputDecoration(
-        border: InputBorder.none,
-        contentPadding: EdgeInsets.zero,
-        counterStyle: widget.decoration.counterStyle,
-        errorStyle: widget.decoration.errorStyle,
-        labelStyle: widget.decoration.labelStyle,
-        helperStyle: widget.decoration.helperStyle,
-        errorText: widget.decoration.errorText,
-        helperText: widget.decoration.helperText,
-        labelText: widget.decoration.labelText,
-        counterText: widget.decoration.counterText,
+        border: border,
+        enabledBorder: border,
+        focusedBorder: focusedBorder,
+        contentPadding: EdgeInsets.symmetric(horizontal: 18),
+        labelText: 'Phone',
+        errorText: 'error',
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -132,40 +143,60 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
           GestureDetector(
             onTap: onChangeCountry,
             child: ValueListenableBuilder<Country?>(
-                valueListenable: _effectiveController!.countryNotifier,
-                builder: (context, value, child) {
-                  final flag = value?.code.toUpperCase().replaceAllMapped(
-                        RegExp(r'[A-Z]'),
-                        (match) => String.fromCharCode(
-                            match.group(0)!.codeUnitAt(0) + 127397),
-                      );
+              valueListenable: _effectiveController!.countryNotifier,
+              builder: (context, value, child) {
+                final flag = value?.code.toUpperCase().replaceAllMapped(
+                      RegExp(r'[A-Z]'),
+                      (match) => String.fromCharCode(
+                          match.group(0)!.codeUnitAt(0) + 127397),
+                    );
 
-                  return Row(
-                    children: [
+                return Row(
+                  children: [
+                    if (flag == null)
                       Text(
                         '+${value?.prefix ?? ''}',
-                        style: textStyle,
                       ),
-                      if (flag != null)
-                        Text(
-                          flag,
-                          style: TextStyle(fontSize: 24),
-                        ),
-                    ],
-                  );
-                }),
+                    if (flag != null)
+                      Text(
+                        flag,
+                        style: TextStyle(fontSize: 24),
+                      ),
+                    SizedBox(width: 6),
+                    Icon(
+                      Icons.expand_more_rounded,
+                      size: 20,
+                      color: Color(0xFF292D32),
+                    )
+                  ],
+                );
+              },
+            ),
           ),
-          SizedBox(width: 16),
           Expanded(
             child: ValueListenableBuilder<Country?>(
               valueListenable: _effectiveController!.countryNotifier,
-              builder: (context, value, child) => TextField(
-                controller: _effectiveController!.nationalNumberController,
-                style: textStyle,
-                keyboardType: TextInputType.number,
-                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                maxLength: value?.length.maxLength ?? 15,
-              ),
+              builder: (context, value, child) {
+                return TextField(
+                  controller: _effectiveController!.nationalNumberController,
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  maxLength: value?.length.maxLength ?? 15,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 18,
+                      horizontal: 18,
+                    ),
+                    counterText: '',
+                    isDense: false,
+                  ),
+                );
+              },
             ),
           ),
         ],
