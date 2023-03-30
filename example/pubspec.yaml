@@ -1,0 +1,21 @@
+name: example
+description: An example Flutter project
+publish_to: "none"
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.19.4 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  phonenumbers:
+    path: ../phonenumbers
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
