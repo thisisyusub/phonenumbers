@@ -139,7 +139,8 @@ class _PhoneNumberFieldState extends State<PhoneNumberField> {
                         (match) => String.fromCharCode(
                             match.group(0)!.codeUnitAt(0) + 127397),
                       );
-                  Row(
+
+                  return Row(
                     children: [
                       Text(
                         '+${value?.prefix ?? ''}',
