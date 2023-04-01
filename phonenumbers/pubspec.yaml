@@ -10,7 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  phonenumbers_core: ^1.0.0
+  phonenumbers_core:
+    git:
+      url: git@github.com:thisisyusub/phonenumbers.git
+      path: core
+      ref: main
 
 dev_dependencies:
   flutter_test:
